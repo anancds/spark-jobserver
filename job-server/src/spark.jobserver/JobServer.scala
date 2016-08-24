@@ -36,12 +36,14 @@ object JobServer {
   // we can have something that stores the ActorSystem so it could be shut down easily later.
   def start(args: Array[String], makeSystem: Config => ActorSystem) {
     val defaultConfig = ConfigFactory.load()
+    println(defaultConfig.toString)
     val config = if (args.length > 0) {
       val configFile = new File(args(0))
       if (!configFile.exists()) {
         println("Could not find configuration file " + configFile)
         sys.exit(1)
       }
+      //用前面的配置文件替换了后面的配置文件，也就是说用local.conf替换了application.conf.
       ConfigFactory.parseFile(configFile).withFallback(defaultConfig).resolve()
     } else {
       defaultConfig
